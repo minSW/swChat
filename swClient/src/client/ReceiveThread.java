@@ -12,7 +12,6 @@ public class ReceiveThread extends Thread{
 
     @Override
     public void run() {
-        // TODO Auto-generated method stub
         super.run();
 
         try {
@@ -48,7 +47,6 @@ public class ReceiveThread extends Thread{
             }
 
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

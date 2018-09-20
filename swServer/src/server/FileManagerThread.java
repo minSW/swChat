@@ -11,17 +11,17 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class FileManagerThread extends Thread {
-    Socket f_socket;
-    DataInputStream dis = null;
-    DataOutputStream dos =null;
-    FileOutputStream fos;
-    BufferedOutputStream bos;
+    private Socket f_socket;
+    private DataInputStream dis = null;
+    private DataOutputStream dos = null;
+    private FileOutputStream fos;
+    private BufferedOutputStream bos;
 
-    FileInputStream fis;
-    BufferedInputStream bis;
+    private FileInputStream fis;
+    private BufferedInputStream bis;
 
     public static String fileNm;
-    String filePath=ChatServer.filePath;
+    private  String filePath=ChatServer.filePath;
 
     //@Override
     public void run() {
@@ -29,28 +29,26 @@ public class FileManagerThread extends Thread {
         try {
             dis = new DataInputStream(f_socket.getInputStream());
             dos = new DataOutputStream(f_socket.getOutputStream());
+
             while(true){
                 if (dis!=null){
                     String type = dis.readUTF();
                     if(type.contains("file")){
                         fileNm=type.split("file")[1];
-                        fileWrite(dis);
+                        fileWrite();
                         break;
                     }else if(type.equals("receive")){
-                        fileRead(dos);
+                        fileRead();
                         break;
                     }
                 }
-
             }
-            // try { dos.close(); } catch (IOException e) { e.printStackTrace(); }
-            // try { dis.close(); } catch (IOException e) { e.printStackTrace(); }
         }catch (IOException e) {
             System.out.println("ERROR");
         }
     }
 
-    private String fileWrite(DataInputStream dis){
+    private void fileWrite(){
         String result;
         try {
             System.out.println("파일을 클라이언트에서 서버로 받아오고 있습니다");
@@ -69,19 +67,21 @@ public class FileManagerThread extends Thread {
             result = "SUCCESS";
 
         } catch (IOException e) {
-            //  e.printStackTrace();
+            e.printStackTrace();
             result = "ERROR";
         } finally{
-            try { fos.close(); } catch (IOException e) { e.printStackTrace(); }
-            try { bos.close(); } catch (IOException e) { e.printStackTrace(); }
-            try { dis.close(); } catch (IOException e) { e.printStackTrace(); }
-
+            try {
+                bos.close();
+                fos.close();
+                dis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
-        return result;
+        System.out.println(result);
     }
 
-    private String fileRead(DataOutputStream dos){
+    private void fileRead(){
 
         String result;
 
@@ -106,16 +106,19 @@ public class FileManagerThread extends Thread {
             System.out.println("(" + file +") 파일이 성공적으로 다운로딩 되었습니다");
             result = "SUCCESS";
         } catch (IOException e) {
-            //  e.printStackTrace();
+            e.printStackTrace();
             result = "ERROR";
         }
         finally{
-            try { fis.close(); } catch (Exception e) { e.printStackTrace(); }
-            try { bis.close(); } catch (IOException e) { e.printStackTrace(); }
-            try { dos.close(); } catch (IOException e) { e.printStackTrace(); }
+            try {
+                bis.close();
+                fis.close();
+                dos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
-        return result;
+        System.out.println(result);
     }
 
     public void setSocket(Socket _socket) {

@@ -15,7 +15,6 @@ public class SendThread extends Thread{
 
     @Override
     public void run() {
-        // TODO Auto-generated method stub
         super.run();
         try {
             BufferedReader tmpbuf = new BufferedReader(new InputStreamReader(System.in));
@@ -28,9 +27,10 @@ public class SendThread extends Thread{
 
 
             while(true){
-                if (ChatClient.login==false){
+                if (!ChatClient.login){
                     Thread.sleep(800);
-                    if (ChatClient.login==true) break;
+                    if (ChatClient.login) break;
+
                     System.out.println("\n(회원가입: 1) (로그인: 2)");
                     int select=tmpbuf.read();
                     tmpbuf.readLine();
@@ -45,8 +45,7 @@ public class SendThread extends Thread{
                         sendWriter.println("SignID접속시도" + SignID +","+SignPW);
                         sendWriter.flush();
 
-                        continue;
-                    }else if (select=='2'){
+                    } else if (select=='2'){
                         System.out.println("ID : ");
                         ChatClient.UserID = tmpbuf.readLine();
                         System.out.println("Password : ");
@@ -55,16 +54,16 @@ public class SendThread extends Thread{
                         sendWriter.println("UserID접속시도" + ChatClient.UserID+","+ChatClient.UserPW);
                         sendWriter.flush();
 
-                        continue;
-                    }else
+                    } else {
                         System.out.println("잘못된 값을 입력하셨습니다");
-                }else break;
+                    }
+                } else break;
             }
 
             while(true){
-                if (ChatClient.Enter==false){
+                if (!ChatClient.Enter){
                     Thread.sleep(800);
-                    if (ChatClient.Enter==true) break;
+                    if (ChatClient.Enter) break;
                     System.out.println("\n(M:N 채팅방 개설 : 0) (1:M 채팅방 개설 : 1) (채팅방 확인 : 2) (채팅방 접속 : 3)");
                     int select=tmpbuf.read();
                     tmpbuf.readLine();
@@ -72,34 +71,33 @@ public class SendThread extends Thread{
                     if (select=='1' || select=='0'){
                         sendWriter.println("채팅방개설요청"+select);
                         sendWriter.flush();
-
                         break;
+
                     }else if (select=='2'){
                         sendWriter.println("채팅방조회요청");
                         sendWriter.flush();
                         Thread.sleep(1000);
+
                     } else if (select =='3'){
-                        if (ChatClient.Enter==false){
+                        if (!ChatClient.Enter){
                             System.out.println("채팅방 번호를 입력하세요");
                             sendString=tmpbuf.readLine();
                             sendWriter.println("채팅방접속요청"+sendString);
                             sendWriter.flush();
                         }
+
                     }
                     else {
                         System.out.println("잘못된 값을 입력하셨습니다");
                     }
-                }else break;
+                } else break;
             }
 
 
             while(true){
                 sendString=tmpbuf.readLine();
 
-                if(sendString.equals("EXIT")) { // 'EXIT' command -> END
-
-                    break;
-                }
+                if(sendString.equals("EXIT")) break;
                 else if(sendString.equals("FILE")){ // 'FILE' command -> FILE SEND MODE
                     Socket f_socket = new Socket(ChatClient.ip, 8888); // filethread socket open
                     DataOutputStream tmp = new DataOutputStream(f_socket.getOutputStream());
@@ -113,6 +111,7 @@ public class SendThread extends Thread{
                         // wait for sending file
                     }
                     f_socket.close();
+
                     sendWriter.println(" [System] 파일을 업로드 했습니다. 받으시려면 'RECEIVE' 이라고 입력하세요 ");
                     sendWriter.flush();		// "COMPELETE" notice to server
 
@@ -130,6 +129,7 @@ public class SendThread extends Thread{
                         // wait for receiving file
                     }
                     f_socket.close();
+
                     if(FileSendThread.result.contains("SUCCESS")) System.out.println("파일을 다운받았습니다");
                     else System.out.println(FileSendThread.result+"경로 혹은 입력에 오류가 있어 실패했습니다. 다시 받으시려면 RECEIVE를 입력하세요");
                 } else {
@@ -142,12 +142,9 @@ public class SendThread extends Thread{
             tmpbuf.close();
             m_socket.close();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public void setSocket(Socket _socket)

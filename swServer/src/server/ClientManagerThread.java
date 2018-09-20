@@ -28,8 +28,8 @@ public class ClientManagerThread extends Thread{
 
     @Override
     public void run() {
-        // TODO Auto-generated method stub
         super.run();
+
         try {
             BufferedReader tmpbuffer = new BufferedReader(new InputStreamReader(m_socket.getInputStream()));
             String text;
@@ -83,7 +83,7 @@ public class ClientManagerThread extends Thread{
                             System.out.println(m_ID + " 이(가) 로그인하였습니다");
                             Me_out.println("[System]"+m_ID + " 이(가) 로그인하였습니다");
                             Me_out.flush();
-                            if(!Chatting.containsKey(m_ID))Chatting.put(m_ID, chat);  //CHAT SAVE Point			
+                            if(!Chatting.containsKey(m_ID))Chatting.put(m_ID, chat);  //CHAT SAVE Point
 
                         }else{
                             System.out.println(IDs + " 는 이미 로그인중입니다");
@@ -226,7 +226,6 @@ public class ClientManagerThread extends Thread{
             m_socket.close();
 
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

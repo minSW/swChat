@@ -14,7 +14,7 @@ public class ChatClient {
 
 
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
+
         try {
             Socket c_socket = new Socket(ip, 8888);
             DataOutputStream tmp = new DataOutputStream(c_socket.getOutputStream());
@@ -33,10 +33,8 @@ public class ChatClient {
             rec_thread.start();
 
         } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

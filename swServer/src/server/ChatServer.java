@@ -14,10 +14,9 @@ public class ChatServer {
 
     public static HashMap<String, PrintWriter> ClientOutput = new HashMap<String,PrintWriter>();
 
-    public static String filePath="/Users/user/Downloads"; // change to server storage path
+    public static String filePath="/Users/minsw/Downloads/server"; // change to server storage path
 
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
 
         try {
             ServerSocket s_socket = new ServerSocket(8888);
@@ -43,7 +42,6 @@ public class ChatServer {
 
 
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
